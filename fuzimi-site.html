@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ふじみスポーツクラブ</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f4f8;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        /* Header styles */
+        header {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        nav ul li {
+            margin: 0.5rem;
+        }
+        nav ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        nav ul li a:hover, nav ul li a.active {
+            background-color: #34495e;
+            color: #3498db;
+        }
+        /* Main content styles */
+        main {
+            padding: 2rem 0;
+        }
+        h1, h2 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        /* Form styles */
+        form {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        /* Card styles */
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        /* Responsive grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        /* Footer styles */
+        footer {
+            background-color: #34495e;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+        /* Utility classes */
+        .hidden {
+            display: none;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .mt-4 {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header id="main-header" class="hidden">
+        <nav class="container">
+            <ul>
+                <li><a href="#" data-page="main">ホーム</a></li>
+                <li><a href="#" data-page="calendar">カレンダー</a></li>
+                <li><a href="#" data-page="payment">支払い</a></li>
+                <li><a href="#" data-page="alarm">アラーム</a></li>
+                <li><a href="#" data-page="weather">天気予報</a></li>
+                <li><a href="#" id="logout">ログアウト</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div id="login-page">
+            <h1 class="text-center">ふじみスポーツクラブ ログイン</h1>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="ユーザー名" required>
+                <input type="password" id="password" placeholder="パスワード" required>
+                <button type="submit">ログイン</button>
+            </form>
+            <button id="show-signup" class="mt-4">新規ユーザー登録</button>
+        </div>
+
+        <div id="signup-page" class="hidden">
+            <h1 class="text-center">新規ユーザー登録</h1>
+            <form id="signup-form">
+                <input type="text" id="new-username" placeholder="新しいユーザー名" required>
+                <input type="password" id="new-password" placeholder="新しいパスワード" required>
+                <input type="password" id="admin-code" placeholder="管理者コード" required>
+                <button type="submit">アカウント作成</button>
+            </form>
+            <button id="back-to-login" class="mt-4">ログイン画面に戻る</button>
+        </div>
+
+        <div id="main-page" class="hidden">
+            <h1 class="text-center">ふじみスポーツクラブへようこそ</h1>
+            <p class="text-center">このサイトでは、カレンダー、支払い、アラーム、天気予報などの機能をご利用いただけます。</p>
+            <h2 class="mt-4">お知らせ</h2>
+            <div id="posts"></div>
+            <div id="add-post-form" class="hidden">
+                <h2>新規投稿</h2>
+                <form id="post-form">
+                    <input type="text" id="post-title" placeholder="タイトル" required>
+                    <input type="text" id="post-subtitle" placeholder="サブタイトル" required>
+                    <textarea id="post-content" placeholder="本文" required></textarea>
+                    <button type="submit">投稿を追加</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="calendar-page" class="hidden">
+            <h1 class="text-center">カレンダー</h1>
+            <div id="calendar"></div>
+        </div>
+
+        <div id="payment-page" class="hidden">
+            <h1 class="text-center">支払い</h1>
+            <form id="payment-form">
+                <input type="number" id="amount" placeholder="金額" required>
+                <button type="submit">支払う</button>
+            </form>
+        </div>
+
+        <div id="alarm-page" class="hidden">
+            <h1 class="text-center">アラーム</h1>
+            <form id="alarm-form">
+                <input type="text" id="alarm-title" placeholder="タイトル" required>
+                <input type="time" id="alarm-time" required>
+                <button type="submit">アラームを追加</button>
+            </form>
+            <div id="alarm-list"></div>
+        </div>
+
+        <div id="weather-page" class="hidden">
+            <h1 class="text-center">天気予報</h1>
+            <div id="weather-forecast" class="grid"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 ふじみスポーツクラブ. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Utility functions
+        function $(id) { return document.getElementById(id); }
+        function showPage(pageId) {
+            document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
+            $(pageId).classList.remove('hidden');
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            document.querySelector(`nav a[data-page="${pageId.replace('-page', '')}"]`)?.classList.add('active');
+        }
+
+        // Navigation
+        document.querySelectorAll('nav a[data-page]').forEach(a => {
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                showPage(`${e.target.dataset.page}-page`);
+            });
+        });
+
+        // Login
+        const adminCredentials = { username: 'r7v3tv', password: 'ybycvyc11' };
+        let accounts = JSON.parse(localStorage.getItem('accounts')) || [
+            { username: 'user', password: 'user', isAdmin: false }
+        ];
+
+        $('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = $('username').value;
+            const password = $('password').value;
+            if (username === adminCredentials.username && password === adminCredentials.password) {
+                localStorage.setItem('currentUser', JSON.stringify({ ...adminCredentials, isAdmin: true }));
+                showPage('main-page');
+                $('main-header').classList.remove('hidden');
+                $('add-post-form').classList.remove('hidden');
+            } else {
+                const account = accounts.find(acc => acc.username === username && acc.password === password);
+                if (account) {
+                    localStorage.setItem('currentUser', JSON.stringify(account));
+                    showPage('main-page');
+                    $('main-header').classList.remove('hidden');
+                } else {
+                    alert('ユーザー名またはパスワードが間違っています。');
+                }
+            }
+        });
+
+        // Signup
+        $('show-signup').addEventListener('click', () => {
+            showPage('signup-page');
+        });
+
+        $('back-to-login').addEventListener('click', () => {
+            showPage('login-page');
+        });
+
+        $('signup-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newUsername = $('new-username').value;
+            const newPassword = $('new-password').value;
+            const adminCode = $('admin-code').value;
+            if (adminCode !== '8wtv') {
+                alert('管理者コードが正しくありません。');
+                return;
+            }
+            if (accounts.some(acc => acc.username === newUsername)) {
+                alert('このユーザー名は既に使用されています。');
+                return;
+            }
+            accounts.push({ username: newUsername, password: newPassword, isAdmin: false });
+            localStorage.setItem('accounts', JSON.stringify(accounts));
+            alert('アカウントが作成されました。');
+            showPage('login-page');
+        });
+
+        // Logout
+        $('logout').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('currentUser');
+            $('main-header').classList.add('hidden');
+            showPage('login-page');
+        });
+
+        // Posts
+        let posts = JSON.parse(localStorage.getItem('posts')) || [
+            { id: 1, title: '重要なお知らせ', subtitle: '施設利用について', content: '施設の利用時間が変更になりました。' },
+            { id: 2, title: 'イベント告知', subtitle: '夏季スポーツ大会', content: '今年の夏季スポーツ大会の日程が決定しました。' }
+        ];
+
+        function renderPosts() {
+            $('posts').innerHTML = posts.map(post => `
+                <div class="card">
+                    <h3>${post.title}</h3>
+                    <h4>${post.subtitle}</h4>
+                    <p>${post.content}</p>
+                    ${JSON.parse(localStorage.getItem('currentUser'))?.isAdmin ? `<button onclick="deletePost(${post.id})">削除</button>` : ''}
+                </div>
+            `).join('');
+        }
+
+        $('post-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newPost = {
+                id: posts.length + 1,
+                title: $('post-title').value,
+                subtitle: $('post-subtitle').value,
+                content: $('post-content').value
+            };
+            posts.push(newPost);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            renderPosts();
+            e.target.reset();
+        });
+
+        function deletePost(id) {
+            posts = posts.filter(post => post.id !== id);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            renderPosts();
+        }
+
+        // Calendar
+        function renderCalendar() {
+            const now = new Date();
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+            let calendarHTML = '<table><tr><th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th></tr><tr>';
+            
+            for (let i = 1; i <= daysInMonth; i++) {
+                const date = new Date(now.getFullYear(), now.getMonth(), i);
+                if (i === 1) {
+                    for (let j = 0; j < date.getDay(); j++) {
+                        calendarHTML += '<td></td>';
+                    }
+                }
+                calendarHTML += `<td>${i}</td>`;
+                if (date.getDay() === 6) {
+                    calendarHTML += '</tr><tr>';
+                }
+            }
+            calendarHTML += '</tr></table>';
+            $('calendar').innerHTML = calendarHTML;
+        }
+
+        // Payment
+        $('payment-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const amount = $('amount').value;
+            
+            alert(`${amount}円の支払いが完了しました。`);
+            e.target.reset();
+        });
+
+        // Alarm
+        $('alarm-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = $('alarm-title').value;
+            const time = $('alarm-time').value;
+            const alarmItem = document.createElement('div');
+            alarmItem.className = 'card';
+            alarmItem.innerHTML = `
+                <h3>${title}</h3>
+                <p>時間: ${time}</p>
+                <button onclick="this.parentElement.remove()">削除</button>
+            `;
+            $('alarm-list').appendChild(alarmItem);
+            e.target.reset();
+        });
+
+        // Weather
+        function renderWeatherForecast() {
+            const mockWeather = [
+                { date: '2023-05-01', temp: 22, condition: '晴れ' },
+                { date: '2023-05-02', temp: 20, condition: '曇り' },
+                { date: '2023-05-03', temp: 18, condition: '雨' },
+            ];
+            $('weather-forecast').innerHTML = mockWeather.map(day => `
+                <div class="card">
+                    <h3>${day.date}</h3>
+                    <p>気温: ${day.temp}°C</p>
+                    <p>天気: ${day.condition}</p>
+                </div>
+            `).join('');
+        }
+
+        // Initial page load
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser) {
+            showPage('main-page');
+            $('main-header').classList.remove('hidden');
+            if (currentUser.isAdmin) {
+                $('add-post-form').classList.remove('hidden');
+            }
+        } else {
+            showPage('login-page');
+        }
+        renderPosts();
+        renderCalendar();
+        renderWeatherForecast();
+    </script>
+</body>
+</html>
